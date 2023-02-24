@@ -1,10 +1,26 @@
+import axios from 'axios';
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
 
-/*
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+
+for (let i = 0; i < followersArray.length; i++){
+  getGitArray(followersArray[i]);
+}
+
+function getGitArray (username){
+axios.get(`https://api.github.com/users/${username}`)
+   .then(resp => {
+    document.querySelector('.cards').appendChild(githubCard(resp.data));
+   })
+   .catch(err => console.error(err))
+
+  }
+/*  
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
     data in order to use it to build your component function
@@ -28,13 +44,12 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
-
-    <div class="card">
+   <div class="card">
       <img src={image url of user} />
       <div class="card-info">
         <h3 class="name">{users name}</h3>
@@ -49,6 +64,50 @@ const followersArray = [];
       </div>
     </div>
 */
+function githubCard(gitInfo){
+  const card = document.createElement("div");
+  const image = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const hThird = document.createElement('h3');
+  const pOne = document.createElement('p');
+  const ptwo = document.createElement('p');
+  const pthird = document.createElement('p');
+  const link = document.createElement('a');
+  const pFour = document.createElement('p');
+  const pFive = document.createElement('p');
+  const pSix = document.createElement('p');
+
+  card.appendChild(image);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(hThird);
+  cardInfo.appendChild(pOne);
+  cardInfo.appendChild(ptwo);
+  cardInfo.appendChild(pthird);
+  pthird.appendChild(link);
+  cardInfo.appendChild(pFour);
+  cardInfo.appendChild(pFive);
+  cardInfo.appendChild(pSix);
+
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  pOne.classList.add('username');
+  hThird.classList.add('name');
+
+  image.src = gitInfo.avatar_url;
+  image.alt = "git User"
+  hThird.textContent = gitInfo.name;
+  pOne.textContent = gitInfo.login;
+  ptwo.textContent = gitInfo.location;
+  pthird.textContent = "Profile";
+  link.textContent = " Link to Profile";
+  link.href = gitInfo.html_url;
+  pFour.textContent = `Followers: ${gitInfo.followers}`;
+  pFive.textContent = `Following: ${gitInfo.following}`;
+  pSix.textContent = `Bio: ${gitInfo.bio}`;
+
+
+  return card;
+}
 
 /*
   List of LS Instructors Github username's:
